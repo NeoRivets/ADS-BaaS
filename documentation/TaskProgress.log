@@ -2,9 +2,9 @@
 
 ## Completed Tasks
 - [x] Changed project name from "supabase" to "ADS-BaaS" in docker-compose.yml
+- [x] Container names already using 'ads-' prefix (no changes needed)
 
 ## Pending Tasks
-- [ ] Update all container names from supabase-* to ads-* (if needed)
 - [ ] Review and update network configurations
 - [ ] Review and update volume paths
 - [ ] Review and update environment variables
