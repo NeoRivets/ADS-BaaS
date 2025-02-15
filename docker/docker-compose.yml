@@ -95,7 +95,7 @@ services:
       interval: 5s
       retries: 3
     depends_on:
-      db:
+      ads-db:
         # Disable this if you are using an external Postgres database
         condition: service_healthy
       analytics:
@@ -165,7 +165,7 @@ services:
     image: postgrest/postgrest:v12.2.0
     restart: unless-stopped
     depends_on:
-      db:
+      ads-db:
         # Disable this if you are using an external Postgres database
         condition: service_healthy
       analytics:
@@ -189,7 +189,7 @@ services:
     image: supabase/realtime:v2.34.7
     restart: unless-stopped
     depends_on:
-      db:
+      ads-db:
         # Disable this if you are using an external Postgres database
         condition: service_healthy
       analytics:
@@ -234,7 +234,7 @@ services:
     image: supabase/storage-api:v1.14.5
     restart: unless-stopped
     volumes:
-      - ./volumes/storage:/var/lib/storage:z
+      - ./volumes/storage:/var/lib/storage:Z
     healthcheck:
       test:
         [
@@ -249,7 +249,7 @@ services:
       interval: 5s
       retries: 3
     depends_on:
-      db:
+      ads-db:
         # Disable this if you are using an external Postgres database
         condition: service_healthy
       rest:
@@ -277,7 +277,7 @@ services:
     image: darthsim/imgproxy:v3.8.0
     restart: unless-stopped
     volumes:
-      - ./volumes/storage:/var/lib/storage:z
+      - ./volumes/storage:/var/lib/storage:Z
     healthcheck:
       test:
         [
@@ -299,7 +299,7 @@ services:
     image: supabase/postgres-meta:v0.84.2
     restart: unless-stopped
     depends_on:
-      db:
+      ads-db:
         # Disable this if you are using an external Postgres database
         condition: service_healthy
       analytics:
@@ -359,7 +359,7 @@ services:
       interval: 5s
       retries: 10
     depends_on:
-      db:
+      ads-db:
         # Disable this if you are using an external Postgres database
         condition: service_healthy
     environment:
@@ -384,8 +384,8 @@ services:
       # GOOGLE_PROJECT_NUMBER: ${GOOGLE_PROJECT_NUMBER}
 
   # Comment out everything below this point if you are using an external Postgres database
-  db:
-    container_name: supabase-db
+  ads-db:
+    container_name: supabase-ads-db
     image: supabase/postgres:15.8.1.020
     restart: unless-stopped
     volumes:
@@ -494,7 +494,7 @@ services:
       timeout: 5s
       retries: 5
     depends_on:
-      db:
+      ads-db:
         condition: service_healthy
       analytics:
         condition: service_healthy
@@ -503,7 +503,7 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      DATABASE_URL: ecto://supabase_admin:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/_supabase
+      DATABASE_URL: ecto://supabase_admin:${POSTGRES_PASSWORD}@ads-db:${POSTGRES_PORT}/_supabase
       CLUSTER_POSTGRES: true
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       VAULT_ENC_KEY: ${VAULT_ENC_KEY}
