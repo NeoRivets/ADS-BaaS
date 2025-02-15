@@ -19,6 +19,7 @@
 - Awaiting further instructions for additional changes
 
 ## Git Changes
-- [ ] Stage changes (git add)
-- [ ] Commit changes with descriptive message
-- [ ] Push changes to repository
+- [x] Stage changes (git add)
+- [x] Commit changes with descriptive message
+- [x] Push changes to repository
+- [x] Configure git identity (Pete Jones <pete@arivant.com>)
