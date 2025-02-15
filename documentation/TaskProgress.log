@@ -5,6 +5,8 @@
 - [x] Container names already using 'ads-' prefix (no changes needed)
 - [x] Network configurations updated - changed subnet from 172.24.0.0/16 to 10.225.0.0/16
 - [x] Consolidated volumes into docker/volumes/ and removed redundant /volumes directory
+- [x] Removed Minio configuration and updated to use AWS-S3 (2/15/2025 4:01 PM)
+- [x] Fixed analytics table reference from analytics_log to _analytics.postgres.logs
 
 ## Pending Tasks
 - [ ] Review and update environment variables
