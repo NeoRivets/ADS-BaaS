@@ -4,9 +4,9 @@
 - [x] Changed project name from "supabase" to "ADS-BaaS" in docker-compose.yml
 - [x] Container names already using 'ads-' prefix (no changes needed)
 - [x] Network configurations updated - changed subnet from 172.24.0.0/16 to 10.225.0.0/16
+- [x] Consolidated volumes into docker/volumes/ and removed redundant /volumes directory
 
 ## Pending Tasks
-- [ ] Review and update volume paths
 - [ ] Review and update environment variables
 - [ ] Update service dependencies
 - [ ] Review and update health checks
