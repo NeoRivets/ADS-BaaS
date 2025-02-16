@@ -117,10 +117,10 @@ services:
       GOTRUE_EXTERNAL_EMAIL_ENABLED: ${ENABLE_EMAIL_SIGNUP}
       GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: ${ENABLE_ANONYMOUS_USERS}
       GOTRUE_MAILER_AUTOCONFIRM: ${ENABLE_EMAIL_AUTOCONFIRM}
-      GOTRUE_SMTP_HOST: email-smtp.${AWS_REGION}.amazonaws.com
-      GOTRUE_SMTP_PORT: 587
-      GOTRUE_SMTP_USER: ${AWS_SES_USER}
-      GOTRUE_SMTP_PASS: ${AWS_SES_PASSWORD}
+      GOTRUE_SMTP_HOST: ${SMTP_HOST}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT}
+      GOTRUE_SMTP_USER: ${SMTP_USER}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS}
       GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL}
 
   rest:
@@ -159,13 +159,15 @@ services:
     image: supabase/realtime:v2.34.7
     restart: unless-stopped
     networks:
-      - ADS-BaaS-Corenet
+      ADS-BaaS-Corenet:
+        aliases:
+          - ArivantOne
     ports:
       - "4000:4000"
     volumes:
       - ./volumes/realtime/data:/app/data
     healthcheck:
-      test: ["CMD", "curl", "-sSfL", "--head", "-o", "/dev/null", "-H", "Host: ads-realtime", "-H", "X-Tenant-External-Id: ArivantOne", "-H", "Authorization: Bearer ${JWT_SECRET}", "http://ads-realtime:4000/api/health"]
+      test: ["CMD", "curl", "-sSfL", "--head", "-o", "/dev/null", "-H", "Host: ArivantOne", "-H", "X-Tenant-External-Id: ArivantOne", "-H", "Authorization: Bearer ${JWT_SECRET}", "http://localhost:4000/status"]
       timeout: 5s
       interval: 5s
       retries: 3
@@ -182,7 +184,7 @@ services:
       DB_USER: supabase_admin
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       DB_NAME: postgres
-      DB_AFTER_CONNECT_QUERY: 'SET search_path TO _realtime'
+      DB_AFTER_CONNECT_QUERY: 'SET search_path TO realtime'
       DB_ENC_KEY: supabaserealtime
       API_JWT_SECRET: ${JWT_SECRET}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
@@ -208,7 +210,7 @@ services:
     volumes:
       - ./volumes/storage:/var/lib/storage:Z
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://ads-storage:5000/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://0.0.0.0:5000/status"]
       interval: 5s
       timeout: 5s
       retries: 3
@@ -229,7 +231,7 @@ services:
       STORAGE_BACKEND: file
       FILE_STORAGE_BACKEND_PATH: /var/lib/storage
       TENANT_ID: ${PROJECT_REF}
-      REGION: ${REGION}
+      AWS_REGION: ${REGION}
       GLOBAL_S3_BUCKET: ${GLOBAL_S3_BUCKET}
       ENABLE_IMAGE_TRANSFORMATION: "true"
       IMGPROXY_URL: http://ads-imgproxy:5001
@@ -470,3 +472,5 @@ networks:
     ipam:
       config:
         - subnet: 10.225.0.0/16
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "0.0.0.0"
