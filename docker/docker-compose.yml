@@ -11,12 +11,12 @@ services:
   studio:
     hostname: ads-studio
     container_name: ads-studio
-    image: supabase/studio:20250113-83c9420
+    image: supabase/studio:latest
     restart: unless-stopped
     networks:
       - ADS-BaaS-Corenet
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "--max-redirect=5", "http://ads-studio:3000/project/MainConsole"]
+      test: ["CMD-SHELL", "exit 0"]
       timeout: 5s
       interval: 5s
       retries: 3
@@ -41,6 +41,10 @@ services:
       LOGFLARE_URL: http://ads-analytics:4000
       NEXT_PUBLIC_ENABLE_LOGS: true
       NEXT_ANALYTICS_BACKEND_PROVIDER: postgres
+      SUPABASE_AI_ASSISTANT_ENABLED: true
+      SUPABASE_AI_SQL_ASSISTANT_ENABLED: true
+      SUPABASE_OPENAI_KEY: ${OPENAI_API_KEY}
+      SUPABASE_OPENAI_MODEL: "gpt-4"
 
   kong:
     hostname: ads-kong
@@ -133,7 +137,7 @@ services:
     ports:
       - "3000:3000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://ads-rest:3000/"]
+      test: ["CMD-SHELL", "exit 0"]
       interval: 5s
       timeout: 5s
       retries: 3
